@@ -7,6 +7,10 @@ pub struct Stack<B, A>(pub B, pub A);
 
 pub struct End;
 
+//
+// Runtime
+//
+
 impl Stack<End, End> {
     pub fn new() -> Stack<End, End> {
         Stack(End, End)
@@ -42,13 +46,6 @@ impl<A, R1, R2> Stack<Stack<R2, R1>, A> {
         stack
     }
 
-    pub fn dup(self) -> Stack<Stack<Stack<R2, R1>, A>, A>
-        where A: Clone
-    {
-        self.apply(
-            |stack, a| stack.push(a.clone()).push(a))
-    }
-
     pub fn debug(self) -> Stack<Stack<R2, R1>, A>
         where A: Debug
     {
@@ -80,7 +77,9 @@ impl<A, B, R1, R2> Stack<Stack<Stack<R2, R1>, B>, A> {
         let (stack, b) = stack.pop();
         f(stack, b, a)
     }
+}
 
+impl<A, B, R1, R2> Stack<Stack<Stack<R2, R1>, B>, A> {
     pub fn swap(self) -> Stack<Stack<Stack<R2, R1>, A>, B> {
         let (stack, a) = self.pop();
         let (stack, b) = stack.pop();
@@ -88,7 +87,22 @@ impl<A, B, R1, R2> Stack<Stack<Stack<R2, R1>, B>, A> {
         let stack = stack.push(b);
         stack
     }
+}
 
+//
+// Rust bindings
+//
+
+impl<A, R1, R2> Stack<Stack<R2, R1>, A> {
+    pub fn clone(self) -> Stack<Stack<Stack<R2, R1>, A>, A>
+        where A: Clone
+    {
+        self.apply(
+            |stack, a| stack.push(a.clone()).push(a))
+    }
+}
+
+impl<A, B, R1, R2> Stack<Stack<Stack<R2, R1>, B>, A> {
     pub fn add(self) -> Stack<Stack<R2, R1>, B::Output>
         where B: Add<A>
     {
@@ -137,14 +151,14 @@ mod tests {
         let stack = Stack((), ());
         let stack = stack.push(1);
         let stack = stack.push(2);
-        let stack = stack.dup();
+        let stack = stack.clone();
         let stack = stack.swap();
         let (stack, _) = stack.pop();
 
         let stack = Stack((), ())
             .push(1)
             .push(2)
-            .dup()
+            .clone()
             .swap();
         let (stack, _) = stack.pop();
     }

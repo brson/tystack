@@ -17,8 +17,8 @@ trait Mixins<R2, R1> {
 impl<R1, R2> Mixins<R2, R1> for Stack<Stack<R2, R1>, u32> {
     fn fib(self) -> Stack<Stack<R2, R1>, u32> {
         self.
-            dup().
-            dup().
+            clone().
+            clone().
             push(1).
             eq().
             swap().
@@ -29,7 +29,7 @@ impl<R1, R2> Mixins<R2, R1> for Stack<Stack<R2, R1>, u32> {
             if_(
                 |stack| {
                     stack.
-                        dup().
+                        clone().
                         push(1).
                         sub().
                         recurse(|stack| stack.fib()).
