@@ -4,3 +4,8 @@ version = "0.1.0"
 authors = ["Brian Anderson <banderson@mozilla.com>"]
 
 [dependencies]
+
+tystack-core = { path = "src/tystack-core" }
+tystack-rt = { path = "src/tystack-rt" }
+tystack-rust = { path = "src/tystack-rust" }
+tystack-lib = { path = "src/tystack-lib" }

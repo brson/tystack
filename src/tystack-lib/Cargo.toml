@@ -1,0 +1,13 @@
+[package]
+name = "tystack-lib"
+version = "0.1.0"
+authors = ["Brian Anderson <banderson@mozilla.com>"]
+
+[lib]
+path = "lib.rs"
+
+[dependencies]
+
+tystack-core = { path = "../tystack-core" }
+tystack-rt = { path = "../tystack-rt" }
+tystack-rust = { path = "../tystack-rust" }
