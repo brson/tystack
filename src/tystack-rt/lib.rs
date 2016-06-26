@@ -5,6 +5,36 @@ extern crate tystack_core as tscore;
 use std::fmt::Debug;
 use tscore::{Stack, End};
 
+#[macro_export]
+macro_rules! def_fn_1to1 {
+    ($self_:ident $name:ident [ $inty0:ty | $outty0:ty ] $ex:expr) => {
+        #[allow(non_camel_case_types)]
+        pub trait $name<R2, R1> {
+            fn $name($self_) -> Stack<Stack<R2, R1>, $outty0>;
+        }
+        impl <R2, R1> $name<R2, R1> for Stack<Stack<R2, R1>, $inty0> {
+            fn $name($self_) -> Stack<Stack<R2, R1>, $outty0> {
+                $ex
+            }
+        }
+    }
+}
+
+#[macro_export]
+macro_rules! def_fn_2to1 {
+    ($self_:ident $name:ident [ $inty1:ty, $inty0:ty | $outty0:ty ] $ex:expr) => {
+        #[allow(non_camel_case_types)]
+        pub trait $name<R2, R1> {
+            fn $name($self_) -> Stack<Stack<R2, R1>, $outty0>;
+        }
+        impl <R2, R1> $name<R2, R1> for Stack<Stack<Stack<R2, R1>, $inty1>, $inty0> {
+            fn $name($self_) -> Stack<Stack<R2, R1>, $outty0> {
+                $ex
+            }
+        }
+    }
+}
+
 pub trait new {
     fn new() -> Stack<End, End>;
 }

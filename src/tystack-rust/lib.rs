@@ -1,6 +1,7 @@
 #![allow(non_camel_case_types)]
 
 extern crate tystack_core as tscore;
+#[macro_use]
 extern crate tystack_rt as tsrt;
 
 use std::ops::{Add, Sub};
@@ -60,22 +61,16 @@ impl<T1, R1, R2> eq<T1, R1, R2> for Stack<Stack<Stack<R2, R1>, T1>, T1> {
     }
 }
 
-pub trait or<R1, R2> {
-    fn or(self) -> Stack<Stack<R2, R1>, bool>;
-}
-impl<R1, R2> or<R1, R2> for Stack<Stack<Stack<R2, R1>, bool>, bool> {
-    fn or(self) -> Stack<Stack<R2, R1>, bool> {
+def_fn_2to1! {
+    self or [bool, bool | bool] {
         self.apply2(
             |stack, b, a| stack.push(b || a))
-    }
-}                  
-
-pub trait not<R1, R2> {
-    fn not(self) -> Stack<Stack<R2, R1>, bool>;
+    }        
 }
-impl<R1, R2> not<R1, R2> for Stack<Stack<R2, R1>, bool> {
-    fn not(self) -> Stack<Stack<R2, R1>, bool> {
+
+def_fn_1to1! {
+    self not [bool | bool] {
         self.apply(
             |stack, a| stack.push(!a))
     }
-}                  
+}

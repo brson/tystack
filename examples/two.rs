@@ -19,5 +19,6 @@ fn main() {
         push(0).
         eq().
         or().
-        not();
+        not().
+        debug();
 }
